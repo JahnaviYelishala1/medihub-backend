@@ -16,7 +16,7 @@ import contactRoutes from './src/routes/contactRoutes.js';
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3306;
+const PORT = process.env.PORT || 18859;
 app.use(express.urlencoded({ extended: true }));
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 app.use(express.json());
