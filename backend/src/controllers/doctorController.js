@@ -1,35 +1,10 @@
 import Doctor from '../models/doctor.js';
 import jwt from 'jsonwebtoken';
-import cloudinary from '../utils/cloudinary.js';
-import streamifier from 'streamifier';
+
 
 export const registerDoctor = async (req, res) => {
   try {
-    console.log('REQ.FILE:', req.file);
     console.log('REQ.BODY:', req.body);
-
-    if (!req.file) {
-      return res.status(400).json({ success: false, message: 'No image file uploaded.' });
-    }
-
-    // Convert buffer to readable stream and upload to Cloudinary
-    const streamUpload = (req) => {
-      return new Promise((resolve, reject) => {
-        const stream = cloudinary.uploader.upload_stream(
-          { folder: 'medicore/doctors' },
-          (error, result) => {
-            if (result) {
-              resolve(result);
-            } else {
-              reject(error);
-            }
-          }
-        );
-        streamifier.createReadStream(req.file.buffer).pipe(stream);
-      });
-    };
-
-    const uploadedImage = await streamUpload(req);
 
     const doctor = await Doctor.create({
       ...req.body,
@@ -37,7 +12,6 @@ export const registerDoctor = async (req, res) => {
       qualifications: JSON.parse(req.body.qualifications),
       availableDays: JSON.parse(req.body.availableDays),
       languagesKnown: JSON.parse(req.body.languagesKnown),
-      docAvatar: uploadedImage.secure_url
     });
 
     const token = jwt.sign({ id: doctor.id }, process.env.JWT_SECRET_KEY, {
@@ -46,9 +20,11 @@ export const registerDoctor = async (req, res) => {
 
     res.status(201).json({ success: true, doctor, token });
   } catch (err) {
+    console.error(err);
     res.status(400).json({ success: false, message: err.message });
   }
 };
+
 
 export const loginDoctor = async (req, res) => {
   const { email, password } = req.body;

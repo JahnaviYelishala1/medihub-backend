@@ -57,10 +57,6 @@ const Doctor = sequelize.define('Doctor', {
     type: DataTypes.STRING,
     allowNull: false
   },
-  docAvatar: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
   role: {
     type: DataTypes.ENUM('Admin', 'Patient', 'Doctor'),
     allowNull: false
