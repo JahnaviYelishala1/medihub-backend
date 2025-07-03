@@ -2,6 +2,7 @@ import User from '../models/user.js';
 import jwt from 'jsonwebtoken';
 import sendOTPEmail from '../utils/emailService.js';
 import Doctor from '../models/doctor.js';
+import Admin from '../models/admin.js'; 
 import bcrypt from 'bcrypt';
 
 const otpStore = {}; 
@@ -28,17 +29,26 @@ export const login = async (req, res) => {
 
     let user;
 
-    if (role === 'Patient' || role === 'Admin') {
+    if (role === 'Patient') {
       user = await User.findOne({ where: { email, role } });
     } else if (role === 'Doctor') {
-      user = await Doctor.findOne({ where: { email } }); // Role is already implied
+      user = await Doctor.findOne({ where: { email } });
+    } else if (role === 'Admin') {
+      user = await Admin.findOne({ where: { email } });
     }
 
     if (!user) {
       return res.status(404).json({ message: `${role} not found` });
     }
 
-    const isMatch = await user.comparePassword(password);
+    // Handle password comparison manually if Admin doesn't use `comparePassword` method
+    let isMatch = false;
+    if (role === 'Admin' || role === 'Doctor') {
+      isMatch = await bcrypt.compare(password, user.password);
+    } else {
+      isMatch = await user.comparePassword(password); // assuming User model has method
+    }
+
     if (!isMatch) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
