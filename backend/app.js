@@ -52,7 +52,7 @@ const createAdminIfNotExists = async () => {
 
 
 // Sync DB and start server
-sequelize.sync({ alter: true }).then(async () => {
+sequelize.sync({ force: true  }).then(async () => {
   console.log('🗄️ All models synced.');
   await createAdminIfNotExists();
   app.listen(PORT, () => {
