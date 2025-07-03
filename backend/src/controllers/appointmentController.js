@@ -18,7 +18,7 @@ export const bookAppointment = async (req, res) => {
       pincode,
       appointmentDate,
       department,
-      timeSlot // ✅ new field
+      timeSlot 
     } = req.body;
 
     // Check for existing appointment with same doctor, date, and slot
@@ -50,7 +50,7 @@ export const bookAppointment = async (req, res) => {
       pincode,
       appointmentDate,
       department,
-      timeSlot // ✅ save in DB
+      timeSlot 
     });
 
     res.status(201).json({ success: true, appointment });

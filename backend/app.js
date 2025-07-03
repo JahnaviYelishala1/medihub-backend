@@ -10,6 +10,9 @@ import medicineRoutes from './src/routes/medicineRoutes.js';
 import cors from 'cors';
 import Payment from './src/models/payment.js';
 import contactRoutes from './src/routes/contactRoutes.js';
+import Admin from './src/models/admin.js';
+import adminRoutes from './src/routes/adminRoutes.js';
+import bcrypt from 'bcrypt';
 
 
 
@@ -36,10 +39,24 @@ app.use('/api/appointments', appointmentRoutes);
 app.use('/api/medicines', medicineRoutes);
 app.use('/api/payments', Payment);
 app.use('/api/contact', contactRoutes);
+app.use('/api/admin', adminRoutes);
+
+const createAdminIfNotExists = async () => {
+  const existingAdmin = await Admin.findOne({ where: { username: 'admin' } });
+  if (!existingAdmin) {
+    const hashedPassword = await bcrypt.hash('admin123', 10);
+    await Admin.create({ username: 'admin', password: hashedPassword });
+    console.log('✅ Admin user created');
+  } else {
+    console.log('👤 Admin already exists');
+  }
+};
+
 
 // Sync DB and start server
-sequelize.sync({ alter: true }).then(() => {
+sequelize.sync({ alter: true }).then(async () => {
   console.log('🗄️ All models synced.');
+  await createAdminIfNotExists();
   app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
   });

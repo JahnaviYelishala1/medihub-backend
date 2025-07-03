@@ -49,7 +49,7 @@ export const loginDoctor = async (req, res) => {
 export const getAllDoctors = async (req, res) => {
   try {
     const doctors = await Doctor.findAll();
-    console.log("DOCTORS:", doctors);  // Add this
+    console.log("DOCTORS:", doctors);  
     res.status(200).json(doctors);
   } catch (err) {
     console.error('Error in getAllDoctors:', err);
