@@ -36,8 +36,6 @@ app.use('/api/auth', authRoutes);
 app.use('/api/protected', protectedRoutes);
 app.use('/api/doctors', doctorRoutes);
 app.use('/api/appointments', appointmentRoutes);
-app.use('/api/medicines', medicineRoutes);
-app.use('/api/payments', Payment);
 app.use('/api/contact', contactRoutes);
 app.use('/api/admin', adminRoutes);
 
