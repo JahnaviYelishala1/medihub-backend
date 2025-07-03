@@ -42,10 +42,10 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/admin', adminRoutes);
 
 const createAdminIfNotExists = async () => {
-  const existingAdmin = await Admin.findOne({ where: { username: 'admin' } });
+  const existingAdmin = await Admin.findOne({ where: { email: 'admin@medihub.com' } });
   if (!existingAdmin) {
     const hashedPassword = await bcrypt.hash('admin123', 10);
-    await Admin.create({ username: 'admin', password: hashedPassword });
+    await Admin.create({ email: 'admin@medihub.com', password: hashedPassword });
     console.log('✅ Admin user created');
   } else {
     console.log('👤 Admin already exists');
