@@ -10,6 +10,7 @@ import cors from 'cors';
 import contactRoutes from './src/routes/contactRoutes.js';
 import Admin from './src/models/admin.js';
 import adminRoutes from './src/routes/adminRoutes.js';
+import medicineRoutes from './src/routes/medicineRoutes.js';
 import bcrypt from 'bcrypt';
 
 
@@ -38,6 +39,8 @@ app.use('/api/doctors', doctorRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/medicines', medicineRoutes);
+
 
 const createAdminIfNotExists = async () => {
   const existingAdmin = await Admin.findOne({ where: { email: 'admin@medihub.com' } });
