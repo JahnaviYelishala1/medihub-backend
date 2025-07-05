@@ -32,6 +32,28 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.options('*', cors(corsOptions));
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID,
+  key_secret: process.env.RAZORPAY_KEY_SECRET,
+});
+
+app.post("/api/payment/create-order", async (req, res) => {
+  const { amount } = req.body;
+
+  const options = {
+    amount: amount * 100, // amount in paise
+    currency: "INR",
+    receipt: `receipt_order_${Math.floor(Math.random() * 10000)}`,
+  };
+
+  try {
+    const order = await razorpay.orders.create(options);
+    res.json(order);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Failed to create Razorpay order" });
+  }
+});
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/protected', protectedRoutes);
