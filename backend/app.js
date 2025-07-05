@@ -11,6 +11,7 @@ import contactRoutes from './src/routes/contactRoutes.js';
 import Admin from './src/models/admin.js';
 import adminRoutes from './src/routes/adminRoutes.js';
 import medicineRoutes from './src/routes/medicineRoutes.js';
+import Razorpay from 'razorpay';
 import bcrypt from 'bcrypt';
 
 
